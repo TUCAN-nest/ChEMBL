@@ -73,7 +73,7 @@ rule aggregate_logfiles:
   output:
     "chembl_31/test_invariance.log"
   shell:
-    "find chembl_31/logs/ -name '*.log' -exec cat {{}} >> {output} \;"
+    "ls -1v ./chembl_31/logs/*.log | xargs cat >> {output}"
 
 
 rule test_invariance:
