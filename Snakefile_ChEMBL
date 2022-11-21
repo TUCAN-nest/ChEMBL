@@ -11,7 +11,7 @@ import sqlite3
 ##############
 
 # Number of compounds in the database
-NUM_MOLFILES = 2136187
+NUM_MOLFILES = 2304875
 
 # Number of compounds to be processed iteratively within one chunk
 MOLFILES_PER_CHUNK = 1000
@@ -72,16 +72,16 @@ def createSDF(dbFilename, outputFilename, firstRow, lastRow):
 ###################
 rule download_chembl_sqlite:
   output:
-    "chembl_30_sqlite.tar.gz"
+    "chembl_31_sqlite.tar.gz"
   shell:
-    "curl https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/chembl_30_sqlite.tar.gz -o {output}"
+    "curl https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_31/chembl_31_sqlite.tar.gz -o {output}"
 
 
 rule extract_chembl_sqlite:
   input:
-    "chembl_30_sqlite.tar.gz"
+    "chembl_31_sqlite.tar.gz"
   output:
-    "chembl_30/chembl_30_sqlite/chembl_30.db"
+    "chembl_31/chembl_31_sqlite/chembl_31.db"
   shell:
     "tar -xzf {input}"
 
@@ -89,9 +89,9 @@ rule extract_chembl_sqlite:
 # Creates a sdf file with V3000 molfiles for the given chunk number
 rule molfiles_from_db_for_chunk:
   input:
-    "chembl_30/chembl_30_sqlite/chembl_30.db"
+    "chembl_31/chembl_31_sqlite/chembl_31.db"
   output:
-    "chembl_30/molfiles/{chunk}.sdf"
+    "chembl_31/molfiles/{chunk}.sdf"
   params:
     chunk_start = lambda wildcards: (int(wildcards.chunk) - 1) * CHUNK_SIZE + 1,
     chunk_end = lambda wildcards: int(wildcards.chunk) * CHUNK_SIZE
@@ -101,22 +101,22 @@ rule molfiles_from_db_for_chunk:
 
 rule test_invariance_for_chunk:
   input:
-    "chembl_30/molfiles/{chunk}.sdf"
+    "chembl_31/molfiles/{chunk}.sdf"
   output:
-    "chembl_30/logs/{chunk}.log"
+    "chembl_31/logs/{chunk}.log"
   run:
     execInvarianceTestForChunk(input[0], output[0])
 
 
 rule aggregate_logfiles:
   input:
-    expand("chembl_30/logs/{chunk}.log", chunk=range(1, CHUNKS + 1))
+    expand("chembl_31/logs/{chunk}.log", chunk=range(1, CHUNKS + 1))
   output:
-    "chembl_30/test_invariance.log"
+    "chembl_31/test_invariance.log"
   shell:
-    "find chembl_30/logs/ -name '*.log' -exec cat {{}} >> {output} \;"
+    "find chembl_31/logs/ -name '*.log' -exec cat {{}} >> {output} \;"
 
 
 rule test_invariance:
   input:
-    "chembl_30/test_invariance.log"
+    "chembl_31/test_invariance.log"
