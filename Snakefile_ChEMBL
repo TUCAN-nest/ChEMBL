@@ -1,10 +1,9 @@
+from chembl_db import create_sdf
 from tucan.canonicalization import canonicalize_molecule
 from tucan.serialization import serialize_molecule
 from tucan.io import graph_from_molfile_text
 from tucan.graph_utils import permute_molecule
-from rdkit import Chem
 import random
-import sqlite3
 
 ##############
 # Parameters #
@@ -53,20 +52,6 @@ def execInvarianceTestForChunk(input, output):
     execInvarianceTestForMolecule(molfile, output, chembl_id)
 
 
-def createSDF(dbFilename, outputFilename, firstRow, lastRow):
-  query = "SELECT cs.molfile, md.chembl_id, cs.rowid FROM compound_structures cs JOIN molecule_dictionary md ON cs.molregno = md.molregno WHERE cs.rowid BETWEEN ? AND ?"
-  con = sqlite3.connect(dbFilename)
-
-  with Chem.SDWriter(outputFilename) as writer:
-    writer.SetForceV3000(True)
-    for row in con.execute(query, (firstRow, lastRow)):
-      mol = Chem.MolFromMolBlock(row[0])
-      mol = Chem.AddHs(mol)
-      mol.SetProp("chembl_id", row[1])
-      mol.SetProp("rowid", str(row[2]))
-      writer.write(mol)
-
-
 ###################
 # Snakemake rules #
 ###################
@@ -96,7 +81,7 @@ rule molfiles_from_db_for_chunk:
     chunk_start = lambda wildcards: (int(wildcards.chunk) - 1) * CHUNK_SIZE + 1,
     chunk_end = lambda wildcards: int(wildcards.chunk) * CHUNK_SIZE
   run:
-    createSDF(input[0], output[0], params.chunk_start, params.chunk_end)
+    create_sdf(input[0], output[0], params.chunk_start, params.chunk_end)
 
 
 rule test_invariance_for_chunk:
