@@ -1,0 +1,17 @@
+.mode csv
+.import chembl_snapshot.csv chembl_snapshot
+
+.print Show failed test_permutation_invariance:
+SELECT chembl_id FROM chembl_snapshot WHERE passed_test_permutation_invariance = "False";
+
+.print Show failed test_sumformula:
+SELECT chembl_id FROM chembl_snapshot WHERE passed_test_sumformula = "False";
+
+.print Show failed test_roundtrip_molfile_graph_tucan_graph_tucan_graph:
+SELECT chembl_id FROM chembl_snapshot WHERE passed_test_roundtrip_molfile_graph_tucan_graph_tucan_graph = "False";
+
+.print Creating index on column "tucan" ...
+CREATE INDEX idx_chembl_snapshot_tucan ON chembl_snapshot (tucan);
+
+.print Show compounds with duplicate TUCAN strings
+SELECT chembl_id, tucan FROM chembl_snapshot WHERE tucan IN (SELECT tucan FROM chembl_snapshot GROUP BY tucan HAVING COUNT(tucan) > 1);
