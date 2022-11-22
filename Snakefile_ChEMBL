@@ -73,11 +73,11 @@ rule aggregate_logfiles:
   input:
     expand("chembl_31/csv/{chunk}.csv", chunk=range(1, CHUNKS + 1))
   output:
-    "chembl_snapshot.csv"
+    "snapshot/chembl_snapshot.csv"
   shell:
     "ls -1v ./chembl_31/csv/*.csv | xargs cat >> {output}"
 
 
 rule snapshot:
   input:
-    "chembl_snapshot.csv"
+    "snapshot/chembl_snapshot.csv"
