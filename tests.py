@@ -1,4 +1,5 @@
 import csv
+import re
 from rdkit import Chem
 from tucan.canonicalization import canonicalize_molecule
 from tucan.io import graph_from_molfile_text
@@ -52,7 +53,11 @@ def _test_permutation_invariance(molfile: str) -> bool:
 
 def _test_sumformula(tucan: str, full_molformula_from_chembl: str) -> bool:
     sumformula_from_tucan = tucan.split("/")[0]
-    return sumformula_from_tucan == full_molformula_from_chembl
+    return sumformula_from_tucan == _prune_charge(full_molformula_from_chembl)
+
+
+def _prune_charge(molformula: str) -> str:
+    return re.split("[-+]", molformula)[0]
 
 
 def _test_roundtrip_molfile_graph_tucan_graph_tucan_graph(molfile: str) -> bool:
