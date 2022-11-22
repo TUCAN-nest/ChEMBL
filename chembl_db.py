@@ -10,7 +10,7 @@ select_molfile_query = """
     """
 
 
-def create_sdf(db_filename, output_filename, first_row, last_row):
+def create_sdf(db_filename: str, output_filename: str, first_row: int, last_row: int):
     """Selects a certain region of the table 'compound_structures' and creates an
     SDFile from the compounds' molfiles. Additionally, implicit hydrogens are
     added and the ChEMBL ID, the sum formula (Hill format) and the row ID are

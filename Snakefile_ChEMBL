@@ -19,12 +19,14 @@ CHUNKS = NUM_MOLFILES // MAX_MOLFILES_PER_CHUNK + 1
 # Number of compounds to be processed iteratively within one chunk
 CHUNK_SIZE = NUM_MOLFILES // CHUNKS + 1
 
+# Log parameters
 onstart:
   logger.info("Parameters:")
   logger.info(f"NUM_MOLFILES={NUM_MOLFILES}")
   logger.info(f"MAX_MOLFILES_PER_CHUNK={MAX_MOLFILES_PER_CHUNK}")
   logger.info(f"CHUNKS={CHUNKS}")
   logger.info(f"CHUNK_SIZE={CHUNK_SIZE}")
+
 
 ###################
 # Snakemake rules #
@@ -58,24 +60,24 @@ rule molfiles_from_db_for_chunk:
     create_sdf(input[0], output[0], params.chunk_start, params.chunk_end)
 
 
-rule test_invariance_for_chunk:
+rule tests_for_chunk:
   input:
     "chembl_31/molfiles/{chunk}.sdf"
   output:
-    "chembl_31/logs/{chunk}.log"
+    "chembl_31/csv/{chunk}.csv"
   run:
-    exec_tests_for_chunk(input[0], output[0])
+    exec_tests_for_chunk(input[0], output[0], int(wildcards.chunk) == 1)
 
 
 rule aggregate_logfiles:
   input:
-    expand("chembl_31/logs/{chunk}.log", chunk=range(1, CHUNKS + 1))
+    expand("chembl_31/csv/{chunk}.csv", chunk=range(1, CHUNKS + 1))
   output:
-    "chembl_31/test_invariance.log"
+    "chembl_snapshot.csv"
   shell:
-    "ls -1v ./chembl_31/logs/*.log | xargs cat >> {output}"
+    "ls -1v ./chembl_31/csv/*.csv | xargs cat >> {output}"
 
 
-rule test_invariance:
+rule snapshot:
   input:
-    "chembl_31/test_invariance.log"
+    "chembl_snapshot.csv"
