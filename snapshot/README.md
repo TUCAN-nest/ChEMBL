@@ -1,6 +1,9 @@
 # ChEMBL snapshot file
 * ChEMBL version: [31](https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_31/)
-* TUCAN commit hash: [b6c21ed461d1fdee66a312ce30dd7002151141db](https://github.com/TUCAN-nest/TUCAN/pull/99/commits/b6c21ed461d1fdee66a312ce30dd7002151141db)
+* TUCAN commit hash: [ec13180c4b299759c5b0a00d3b7803893523b437](https://github.com/TUCAN-nest/TUCAN/commit/ec13180c4b299759c5b0a00d3b7803893523b437)
+* Python version (`python --version`): 3.10.6
+* Snakemake version (`snakemake --version`): 7.18.2+0.ga5c35239.dirty
+* RDKit version (`pip show rdkit`): 2022.9.2
 
 ## Licensing and Attribution
 This snapshot file is covered by the _Creative Commons Attribution-ShareAlike 4.0 International_ (CC BY-SA 4.0) license (see LICENSE file).
