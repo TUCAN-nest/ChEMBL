@@ -11,7 +11,7 @@ from tests import exec_tests_for_chunk
 NUM_MOLFILES = 2304875
 
 # Maximum number of compounds within one chunk
-MAX_MOLFILES_PER_CHUNK = 1000
+MAX_MOLFILES_PER_CHUNK = 10000
 
 # Number of chunks
 CHUNKS = NUM_MOLFILES // MAX_MOLFILES_PER_CHUNK + 1

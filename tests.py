@@ -4,7 +4,7 @@ from rdkit import Chem
 from tucan.canonicalization import canonicalize_molecule
 from tucan.io import graph_from_molfile_text
 from tucan.serialization import serialize_molecule
-from tucan.tests import permutation_invariance, roundtrip_graph_tucan_graph_tucan_graph
+from tucan.test_utils import permutation_invariance, roundtrip_graph_tucan_graph_tucan_graph
 
 
 def exec_tests_for_chunk(input_sdfile: str, output_csv: str, add_header: bool):
