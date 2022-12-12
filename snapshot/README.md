@@ -5,8 +5,19 @@
 * Snakemake version (`snakemake --version`): 7.18.2+0.ga5c35239.dirty
 * RDKit version (`pip show rdkit`): 2022.9.2
 
+## Analysis pipeline
+Analysis of the snapshot file happens in a SQLite database using the instructions in _[analysis.sql](analysis.sql)_ (a mix of SQLite meta-commands and SQL statements). The analysis' results are written into separate csv files, which are not added to this repository.
+
+Requirements:
+- sqlite3
+- The ChEMBL SQLite database is expected to be present in `../chembl_31/chembl_31_sqlite/chembl_31.db` (as downloaded and extracted by the [Snakemake workflow](../Snakefile_ChEMBL)).
+
+To run the analysis pipeline:
+- in-memory: `sqlite3 ":memory:" < analysis.sql` (uses about 8.2 GB of memory)
+- on-disk: `sqlite3 analysis.db < analysis.sql`
+
 ## Licensing and Attribution
-This snapshot file is covered by the _Creative Commons Attribution-ShareAlike 4.0 International_ (CC BY-SA 4.0) license (see LICENSE file).
+This snapshot file is covered by the _Creative Commons Attribution-ShareAlike 4.0 International_ (CC BY-SA 4.0) license (see _[LICENSE](LICENSE)_ file).
 
 The snapshot file is a derivate work of the [ChEMBL database release](https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/), which is licensed by the _Creative Commons Attribution-ShareAlike 3.0 Unported_ (CC BY-SA 3.0) license.
 
