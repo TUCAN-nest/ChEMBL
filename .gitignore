@@ -2,3 +2,4 @@
 .snakemake
 chembl_31_sqlite.tar.gz
 chembl_31/
+snapshot/analysis_*.csv
