@@ -1,5 +1,6 @@
 .idea
 .snakemake
+__pycache__
 chembl_31_sqlite.tar.gz
 chembl_31/
 snapshot/analysis_*.csv
